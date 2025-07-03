@@ -1,0 +1,61 @@
+cmake:
+  application:
+    configuration-dir: 'C:/Users/odilo/zephyrproject/ProfetoFinal'
+    source-dir: 'C:/Users/odilo/zephyrproject/ProfetoFinal'
+  board:
+    name: 'stm32f429i_disc1'
+    path:
+     - 'C:/Users/odilo/zephyrproject/zephyr/boards/st/stm32f429i_disc1'
+    qualifiers: 'stm32f429xx'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/bindings'
+    files:
+     - 'C:/Users/odilo/zephyrproject/zephyr/boards/st/stm32f429i_disc1/stm32f429i_disc1.dts'
+     - 'C:/Users/odilo/zephyrproject/ProfetoFinal/stm32f429i_disc1.overlay'
+    include-dirs:
+     - 'C:/Users/odilo/zephyrproject/modules/hal/ambiq/dts'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/atmel/include'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/bouffalolab/include'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/bouffalolab/include/zephyr'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/gigadevice/include'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/microchip/include'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/microchip/dts'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/nuvoton/dts'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/nxp/dts'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/stm32/dts'
+     - 'C:/Users/odilo/zephyrproject/modules/hal/ti/dts'
+     - 'C:/Users/odilo/zephyrproject/zephyr/include'
+     - 'C:/Users/odilo/zephyrproject/zephyr/include/zephyr'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/common'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/vendor'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/rx'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/x86'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/xtensa'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/sparc'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/riscv'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/posix'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/arm64'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/arm'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts/arc'
+     - 'C:/Users/odilo/zephyrproject/zephyr/dts'
+    user-files:
+     - 'C:/Users/odilo/zephyrproject/ProfetoFinal/stm32f429i_disc1.overlay'
+  kconfig:
+    files:
+     - 'C:/Users/odilo/zephyrproject/zephyr/boards/st/stm32f429i_disc1/stm32f429i_disc1_defconfig'
+     - 'C:/Users/odilo/zephyrproject/ProfetoFinal/prj.conf'
+    user-files:
+     - 'C:/Users/odilo/zephyrproject/ProfetoFinal/prj.conf'
+  toolchain:
+    name: 'zephyr'
+    path: 'C:/zephyr-sdk-0.17.2'
+  zephyr:
+    version: '4.1.99'
+    zephyr-base: 'C:/Users/odilo/zephyrproject/zephyr'
+version: '0.1.0'
+west:
+  command: 'C:\Users\odilo\AppData\Local\Programs\Python\Python312\Scripts\west build -b stm32f429i_disc1 .'
+  topdir: 'C:\Users\odilo\zephyrproject'
+  version: '1.4.0'

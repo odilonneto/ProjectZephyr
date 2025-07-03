@@ -1,0 +1,22 @@
+/*
+ * Device Tree Overlay Simples para STM32F429I Discovery
+ * Apenas configuração do LED
+ */
+
+/ {
+    aliases {
+        led0 = &green_led;
+    };
+
+    leds {
+        compatible = "gpio-leds";
+        green_led: led_0 {
+            gpios = <&gpiog 13 GPIO_ACTIVE_HIGH>;
+            label = "Green LED";
+        };
+    };
+};
+
+&gpiog {
+    status = "okay";
+};

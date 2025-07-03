@@ -1,0 +1,2 @@
+# Load board Kconfig descriptions.
+osource "C:/Users/odilo/zephyrproject/zephyr/boards/st/stm32f429i_disc1/Kconfig.stm32f429i_disc1"
