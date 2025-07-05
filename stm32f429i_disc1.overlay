@@ -1,11 +1,20 @@
 /*
- * Device Tree Overlay Simples para STM32F429I Discovery
- * Apenas configuração do LED
+ * Device Tree Overlay para STM32F429I Discovery
+ * - Configura o LED Verde (PG13).
+ * - Configura o Console e Shell para usar USB CDC ACM (Virtual COM Port).
+ * - Adiciona um alias para o botão do usuário (PA0).
  */
 
 / {
+    chosen {
+        /* Redireciona o console e o shell para o dispositivo USB CDC ACM UART */
+        zephyr,console = &cdc_acm_uart0;
+        zephyr,shell-uart = &cdc_acm_uart0;
+    };
+    
     aliases {
         led0 = &green_led;
+        sw0 = &user_button; /* Apenas referenciamos o botão existente no dts base. */
     };
 
     leds {
@@ -17,6 +26,20 @@
     };
 };
 
+/* Habilita os clocks dos GPIOs necessários */
 &gpiog {
-    status = "okay";
+    status = "okay"; /* Para o LED em PG13 */
+};
+
+&gpioa {
+    status = "okay"; /* Para o Botão do Usuário em PA0 */
+};
+
+/* Habilita o controlador USB e adiciona a instância do CDC ACM */
+&zephyr_udc0 {
+    status = "okay"; /* Garante que o controlador USB está habilitado */
+    cdc_acm_uart0: cdc_acm_uart0 {
+        compatible = "zephyr,cdc-acm-uart";
+        label = "CDC_ACM_UART_0";
+    };
 };

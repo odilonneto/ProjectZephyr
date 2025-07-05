@@ -133,6 +133,33 @@ config ZEPHYR_NRF_WIFI_MODULE
 config ZEPHYR_OPEN_AMP_MODULE
    bool
    default y
+config ZEPHYR_OPENTHREAD_MODULE
+   bool
+   default y
+config ZEPHYR_PERCEPIO_MODULE
+   bool
+   default y
+config ZEPHYR_PICOLIBC_MODULE
+   bool
+   default y
+config ZEPHYR_SEGGER_MODULE
+   bool
+   default y
+config ZEPHYR_TINYCRYPT_MODULE
+   bool
+   default y
+config ZEPHYR_TRUSTED_FIRMWARE_A_MODULE
+   bool
+   default y
+config ZEPHYR_TRUSTED_FIRMWARE_M_MODULE
+   bool
+   default y
+config ZEPHYR_UOSCORE_UEDHOC_MODULE
+   bool
+   default y
+config ZEPHYR_ZCBOR_MODULE
+   bool
+   default y
 config ZEPHYR_NRF_HW_MODELS_MODULE
    bool
    default y

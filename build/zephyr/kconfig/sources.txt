@@ -7,6 +7,17 @@ C:\Users\odilo\zephyrproject\ProfetoFinal\build\Kconfig\boards\Kconfig.stm32f429
 C:\Users\odilo\zephyrproject\ProfetoFinal\build\Kconfig\soc\Kconfig
 C:\Users\odilo\zephyrproject\ProfetoFinal\build\Kconfig\soc\Kconfig.defconfig
 C:\Users\odilo\zephyrproject\ProfetoFinal\build\Kconfig\soc\Kconfig.soc
+C:\Users\odilo\zephyrproject\modules\debug\percepio\DFM\kernelports\Zephyr\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\DFM\kernelports\Zephyr\storageports\Filesystem\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\DFM\kernelports\Zephyr\storageports\Flash\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\config\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\kernelports\Zephyr\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\kernelports\Zephyr\streamports\Semihost\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\streamports\ARM_ITM\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\streamports\File\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\streamports\Jlink_RTT\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\TraceRecorder\streamports\RingBuffer\Kconfig
+C:\Users\odilo\zephyrproject\modules\debug\percepio\zephyr\Kconfig
 C:\Users\odilo\zephyrproject\modules\hal\espressif\zephyr\Kconfig
 C:\Users\odilo\zephyrproject\modules\hal\intel\zephyr\Kconfig
 C:\Users\odilo\zephyrproject\modules\hal\intel\zephyr\subsys\logging\backends\Kconfig.i2c
@@ -14,6 +25,7 @@ C:\Users\odilo\zephyrproject\modules\hal\telink\Kconfig
 C:\Users\odilo\zephyrproject\modules\hal\telink\tlsr9\Kconfig
 C:\Users\odilo\zephyrproject\modules\lib\gui\lvgl\Kconfig
 C:\Users\odilo\zephyrproject\modules\lib\gui\lvgl\zephyr\Kconfig
+C:\Users\odilo\zephyrproject\modules\lib\picolibc\zephyr\Kconfig
 C:\Users\odilo\zephyrproject\zephyr\Kconfig
 C:\Users\odilo\zephyrproject\zephyr\Kconfig.constants
 C:\Users\odilo\zephyrproject\zephyr\Kconfig.zephyr

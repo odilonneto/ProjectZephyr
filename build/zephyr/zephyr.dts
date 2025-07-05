@@ -9,22 +9,22 @@
 
 	/* node '/chosen' defined in zephyr\dts\common\skeleton.dtsi:12 */
 	chosen {
-		zephyr,flash-controller = &flash;  /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:26 */
-		zephyr,cortex-m-idle-timer = &rtc; /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:27 */
-		zephyr,entropy = &rng;             /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:12 */
-		zephyr,console = &usart1;          /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:19 */
-		zephyr,shell-uart = &usart1;       /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:20 */
-		zephyr,sram = &sram0;              /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:21 */
-		zephyr,flash = &flash0;            /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:22 */
-		zephyr,ccm = &ccm0;                /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:23 */
-		zephyr,display = &ltdc;            /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:24 */
-		zephyr,touch = &stmpe811;          /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:25 */
+		zephyr,flash-controller = &flash;   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:26 */
+		zephyr,cortex-m-idle-timer = &rtc;  /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:27 */
+		zephyr,entropy = &rng;              /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:12 */
+		zephyr,sram = &sram0;               /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:21 */
+		zephyr,flash = &flash0;             /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:22 */
+		zephyr,ccm = &ccm0;                 /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:23 */
+		zephyr,display = &ltdc;             /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:24 */
+		zephyr,touch = &stmpe811;           /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:25 */
+		zephyr,console = &cdc_acm_uart0;    /* in ProfetoFinal\stm32f429i_disc1.overlay:11 */
+		zephyr,shell-uart = &cdc_acm_uart0; /* in ProfetoFinal\stm32f429i_disc1.overlay:12 */
 	};
 
 	/* node '/aliases' defined in zephyr\dts\common\skeleton.dtsi:13 */
 	aliases {
-		sw0 = &user_button; /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:61 */
-		led0 = &green_led;  /* in ProfetoFinal\stm32f429i_disc1.overlay:8 */
+		led0 = &green_led;  /* in ProfetoFinal\stm32f429i_disc1.overlay:16 */
+		sw0 = &user_button; /* in ProfetoFinal\stm32f429i_disc1.overlay:17 */
 	};
 
 	/* node '/soc' defined in zephyr\dts\arm\armv7-m.dtsi:6 */
@@ -139,6 +139,7 @@
 				#gpio-cells = < 0x2 >;        /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:162 */
 				reg = < 0x40020000 0x400 >;   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:163 */
 				clocks = < &rcc 0x30 0x1 >;   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:164 */
+				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:35 */
 				phandle = < 0xd >;            /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:170 */
 			};
 
@@ -196,7 +197,7 @@
 				#gpio-cells = < 0x2 >;        /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:32 */
 				reg = < 0x40021800 0x400 >;   /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:33 */
 				clocks = < &rcc 0x30 0x40 >;  /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:34 */
-				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:21 */
+				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:31 */
 				phandle = < 0x5f >;           /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:39 */
 			};
 
@@ -1508,7 +1509,13 @@
 			         < &rcc 0x7 0xff >;                                                  /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:203 */
 			pinctrl-0 = < &usb_otg_hs_dm_pb14 &usb_otg_hs_dp_pb15 &usb_otg_hs_id_pb12 >; /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:269 */
 			pinctrl-names = "default";                                                   /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:270 */
-			status = "okay";                                                             /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:271 */
+			status = "okay";                                                             /* in ProfetoFinal\stm32f429i_disc1.overlay:40 */
+
+			/* node '/soc/usb@40040000/cdc_acm_uart0' defined in ProfetoFinal\stm32f429i_disc1.overlay:41 */
+			cdc_acm_uart0: cdc_acm_uart0 {
+				compatible = "zephyr,cdc-acm-uart"; /* in ProfetoFinal\stm32f429i_disc1.overlay:42 */
+				label = "CDC_ACM_UART_0";           /* in ProfetoFinal\stm32f429i_disc1.overlay:43 */
+			};
 		};
 
 		/* node '/soc/can@40006400' defined in zephyr\dts\arm\st\f4\stm32f405.dtsi:208 */
@@ -1966,7 +1973,7 @@
 
 	/* node '/leds' defined in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:35 */
 	leds {
-		compatible = "gpio-leds"; /* in ProfetoFinal\stm32f429i_disc1.overlay:12 */
+		compatible = "gpio-leds"; /* in ProfetoFinal\stm32f429i_disc1.overlay:21 */
 
 		/* node '/leds/led_3' defined in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:38 */
 		green_led_3: led_3 {
@@ -1980,10 +1987,10 @@
 			label = "User LD4";         /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:45 */
 		};
 
-		/* node '/leds/led_0' defined in ProfetoFinal\stm32f429i_disc1.overlay:13 */
+		/* node '/leds/led_0' defined in ProfetoFinal\stm32f429i_disc1.overlay:22 */
 		green_led: led_0 {
-			gpios = < &gpiog 0xd 0x0 >; /* in ProfetoFinal\stm32f429i_disc1.overlay:14 */
-			label = "Green LED";        /* in ProfetoFinal\stm32f429i_disc1.overlay:15 */
+			gpios = < &gpiog 0xd 0x0 >; /* in ProfetoFinal\stm32f429i_disc1.overlay:23 */
+			label = "Green LED";        /* in ProfetoFinal\stm32f429i_disc1.overlay:24 */
 		};
 	};
 

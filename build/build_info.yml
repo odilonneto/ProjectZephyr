@@ -56,6 +56,6 @@ cmake:
     zephyr-base: 'C:/Users/odilo/zephyrproject/zephyr'
 version: '0.1.0'
 west:
-  command: 'C:\Users\odilo\AppData\Local\Programs\Python\Python312\Scripts\west build -b stm32f429i_disc1 .'
+  command: 'C:\Users\odilo\AppData\Local\Programs\Python\Python312\Scripts\west build --pristine -b stm32f429i_disc1 .'
   topdir: 'C:\Users\odilo\zephyrproject'
   version: '1.4.0'
