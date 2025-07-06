@@ -14,6 +14,7 @@
     
     aliases {
         led0 = &green_led;
+        led1 = &red_led_4;
         sw0 = &user_button; /* Apenas referenciamos o botão existente no dts base. */
     };
 
