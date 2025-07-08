@@ -1,35 +1,72 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/dac.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/shell/shell.h> // api do shel, comunicação
 #include <stdlib.h>             // para atoi
 #include <string.h>             // para strlen, strtol
 #include <zephyr/debug/thread_analyzer.h>
-
+#include <zephyr/drivers/adc.h>
+#include <zephyr/devicetree.h>
+#include <inttypes.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <zephyr/sys/util.h>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 /* --- CONFIGURAÇÃO DOS LEDS, BOTÕES E THREADS --- */
+
 #define LED0_NODE DT_ALIAS(led0)
 #define LED1_NODE DT_ALIAS(led1)
 #define SW0_NODE DT_ALIAS(sw0)
+#define ZEPHYR_USER_NODE DT_PATH(zephyr_user)
+#define DAC_NODE DT_PHANDLE(ZEPHYR_USER_NODE, dac)
+#define DAC_CHANNEL_ID DT_PROP(ZEPHYR_USER_NODE, dac_channel_id)
+#define DAC_RESOLUTION DT_PROP(ZEPHYR_USER_NODE, dac_resolution)
+#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
+	ADC_DT_SPEC_GET_BY_IDX(node_id, idx),
+static const struct device *const dac_dev = DEVICE_DT_GET(DAC_NODE);
+
+static const struct dac_channel_cfg dac_ch_cfg = {
+	.channel_id  = DAC_CHANNEL_ID,
+	.resolution  = DAC_RESOLUTION,
+#if defined(CONFIG_DAC_BUFFER_NOT_SUPPORT)
+	.buffered = false,
+#else
+	.buffered = true,
+#endif /* CONFIG_DAC_BUFFER_NOT_SUPPORT */
+};
+
+static const struct adc_dt_spec adc_channels[] = {
+	DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels,
+			     DT_SPEC_AND_COMMA)
+};
+
+
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios,
 							      {0});
 static struct gpio_callback button_cb_data;
-static uint64_t last_total_cycles = 0;
-static uint64_t last_idle_cycles = 0;
 volatile uint32_t led_speed = 1000;
 volatile uint8_t led_mode = 0; // 0 = leds alternando, 1 = apenas led verde, 2 = apenas led vermelho, 3 = leds sincronizados
 #define LED_STACK_SIZE 512
 #define LED_PRIORITY 5 // Prioridade da tarefa do LED
+#define FILTER_PRIORITY 3
+#define ADC_PRIORITY 
+#define FILTER_STACK_SIZE 1024
+const uint16_t dac_values = 1U << DAC_RESOLUTION;
 
+const uint16_t sleep_time = 4096 / dac_values > 0 ?
+    4096 / dac_values : 1;
 K_THREAD_STACK_DEFINE(led_stack, LED_STACK_SIZE);
+K_THREAD_STACK_DEFINE(filter_stack, FILTER_STACK_SIZE);
 struct k_thread led_thread_data;
+struct k_thread dac_thread_data;
 k_tid_t led_thread_id;
-
+k_tid_t filter_thread_id;
 /* --- TAREFA DO LED (Soft Real-Time) --- */
 // Esta é um exemplo de tarefa de tempo real soft.
 /* Esta tarefa pisca os leds de acordo com o led_mode, definido no cabeçalho do arquivo. */
@@ -57,10 +94,90 @@ void led_task(void *arg1, void *arg2, void *arg3)
     }
 }
 
+void filter_task(){
+
+    uint8_t err;
+	uint32_t count = 0;
+	uint16_t buf;
+	struct adc_sequence sequence = {
+		.buffer = &buf,
+		/* buffer size in bytes, not number of samples */
+		.buffer_size = sizeof(buf),
+	};
+
+	/* Configure channels individually prior to sampling. */
+	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+		if (!adc_is_ready_dt(&adc_channels[i])) {
+			printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
+			return;
+		}
+
+		err = adc_channel_setup_dt(&adc_channels[i]);
+		if (err < 0) {
+			printk("Could not setup channel #%d (%d)\n", i, err);
+			return;
+		}
+	}
+
+    uint8_t sample_size = 30;
+    uint16_t samples_to_filter[sample_size];
+    uint8_t current_index = 0;
+    for (uint8_t i = 0; i < sample_size; i++) {
+        samples_to_filter[i] = 0.0;
+    }
+
+	while (1) {
+
+		for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+			int32_t val_mv;
+            
+			(void)adc_sequence_init_dt(&adc_channels[i], &sequence);
+
+			err = adc_read_dt(&adc_channels[i], &sequence);
+			if (err < 0) {
+				printk("Could not read (%d)\n", err);
+				continue;
+			}
+
+			if (adc_channels[i].channel_cfg.differential) {
+				val_mv = (int32_t)((int16_t)buf);
+			} else {
+				val_mv = (int32_t)buf;
+			}
+
+            samples_to_filter[current_index] = val_mv;
+            current_index++;
+
+            if (current_index > sample_size){
+                current_index = 0;
+            }
+
+            float sum = 0.0;
+            for (uint8_t i = 0; i < sample_size; i++) {
+                sum += samples_to_filter[i];
+            }
+
+            dac_write_value(dac_dev, DAC_CHANNEL_ID, sum/sample_size);
+
+			err = adc_raw_to_millivolts_dt(&adc_channels[i],
+						       &val_mv);
+
+			if (err < 0) {
+				printk(" (value in mV not available)\n");
+			} else {
+				printk(" = %"PRId32" mV\n", val_mv);
+			}
+
+		k_sleep(K_MSEC(dac_values));
+	    }
+    }
+}
+
+
 /* Função axuiliar que verifica se uma string pode ser convertida a um número
     Retorna 1 se sim, 0 se não.
 */
-int is_string_number(const char *str) {
+uint8_t is_string_number(const char *str) {
     char *endptr;
     long val = strtol(str, &endptr, 10);
     (void*) val;
@@ -225,6 +342,27 @@ int main(void)
 	gpio_add_callback(button.port, &button_cb_data);
 	LOG_INF("Set up button at %s pin %d\n", button.port->name, button.pin);
 
+    if (!device_is_ready(dac_dev)) {
+		printk("DAC device %s is not ready\n", dac_dev->name);
+		return 0;
+	}
+
+	ret = dac_channel_setup(dac_dev, &dac_ch_cfg);
+
+	if (ret != 0) {
+		printk("Setting up of DAC channel failed with code %d\n", ret);
+		return 0;
+	}
+
+    filter_thread_id = k_thread_create(&dac_thread_data, filter_stack,
+                    K_THREAD_STACK_SIZEOF(filter_stack),
+                    filter_task, NULL, NULL, NULL,
+                    FILTER_PRIORITY, 0, K_NO_WAIT);
+    
+    k_thread_name_set(filter_thread_id, "filter_task");
+
+
+
     LOG_INF("Tarefa do LED criada com sucesso. Shell esta pronto.");
 
     return 0;
@@ -250,13 +388,14 @@ Exemplos de tarefa de tempo real soft realtime:
 2. Criar uma tarefa para o console/shell que permita o acesso às informações primárias
  do sistema (tarefas instaladas, heap livre e informações de runtime das tarefas).
 Crie também um comando para acessar informações com relação às tarefas de tempo real.
-Falta implementar: informações em relação às tarefas de tempo real.
-
-Fazer uma melhoria no comando task_info e passar um parametro que será a tarefa que se deseja ver asinformações, atualmente só mostra do LED.
-Fazer um comando help que mostra os comandos disponíveis. Fazer um print no shell quando inicia o sistema chamando essa função help.
 
 3. Criar uma tarefa para piscar um led. done
 
 4. Criar uma tarefa que executa alguma função pelo clique do botão da placa utilizada. done
 
+falta fazer(geral):
+Fazer uma melhoria no comando task_info e passar um parametro que será a tarefa que se deseja ver as informações, atualmente só mostra do LED.
+Fazer um comando help que mostra os comandos disponíveis. Fazer um print no shell quando inicia o sistema chamando essa função help.
+informações em relação às tarefas de tempo real.
+printar a saida do adc
 */
