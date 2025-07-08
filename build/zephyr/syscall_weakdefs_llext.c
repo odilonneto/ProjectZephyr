@@ -14,6 +14,29 @@ static void * const no_syscall_impl Z_GENERIC_SECTION(llext_no_syscall_impl);
  * linker outside this file will be exported as NULL and simply fail when
  * an extension requiring them is loaded.
  */
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_adc_channel_setup;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_adc_read;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_adc_read_async;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_cancel_channel_alarm;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_frequency;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_guard_period;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_max_top_value;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_num_of_channels;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_pending_int;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_top_value;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_value;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_get_value_64;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_is_counting_up;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_reset;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_set_channel_alarm;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_set_guard_period;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_set_top_value;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_start;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_stop;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_ticks_to_us;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_counter_us_to_ticks;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_dac_channel_setup;
+extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_dac_write_value;
 extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_device_deinit;
 extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_device_get_binding;
 extern __weak ALIAS_OF(no_syscall_impl) void * const z_impl_device_get_by_dt_nodelabel;

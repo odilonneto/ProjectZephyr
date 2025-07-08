@@ -145,6 +145,190 @@
     ],
     [
         [
+            "int adc_channel_setup",
+            "const struct device *dev,\n\t\t\t\tconst struct adc_channel_cfg *channel_cfg"
+        ],
+        "adc.h",
+        true
+    ],
+    [
+        [
+            "int adc_read",
+            "const struct device *dev,\n\t\t       const struct adc_sequence *sequence"
+        ],
+        "adc.h",
+        true
+    ],
+    [
+        [
+            "int adc_read_async",
+            "const struct device *dev,\n\t\t\t     const struct adc_sequence *sequence,\n\t\t\t     struct k_poll_signal *async"
+        ],
+        "adc.h",
+        true
+    ],
+    [
+        [
+            "bool counter_is_counting_up",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint8_t counter_get_num_of_channels",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint32_t counter_get_frequency",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint32_t counter_us_to_ticks",
+            "const struct device *dev, uint64_t us"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint64_t counter_ticks_to_us",
+            "const struct device *dev, uint32_t ticks"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint32_t counter_get_max_top_value",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_start",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_stop",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_get_value",
+            "const struct device *dev, uint32_t *ticks"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_get_value_64",
+            "const struct device *dev, uint64_t *ticks"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_reset",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_set_channel_alarm",
+            "const struct device *dev,\n\t\t\t\t\tuint8_t chan_id,\n\t\t\t\t\tconst struct counter_alarm_cfg *alarm_cfg"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_cancel_channel_alarm",
+            "const struct device *dev,\n\t\t\t\t\t   uint8_t chan_id"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_set_top_value",
+            "const struct device *dev,\n\t\t\t\t    const struct counter_top_cfg *cfg"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_get_pending_int",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint32_t counter_get_top_value",
+            "const struct device *dev"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int counter_set_guard_period",
+            "const struct device *dev,\n\t\t\t\t\tuint32_t ticks,\n\t\t\t\t\tuint32_t flags"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "uint32_t counter_get_guard_period",
+            "const struct device *dev,\n\t\t\t\t\t    uint32_t flags"
+        ],
+        "counter.h",
+        true
+    ],
+    [
+        [
+            "int dac_channel_setup",
+            "const struct device *dev,\n\t\t\t\tconst struct dac_channel_cfg *channel_cfg"
+        ],
+        "dac.h",
+        true
+    ],
+    [
+        [
+            "int dac_write_value",
+            "const struct device *dev, uint8_t channel,\n\t\t\t      uint32_t value"
+        ],
+        "dac.h",
+        true
+    ],
+    [
+        [
             "int gpio_pin_interrupt_configure",
             "const struct device *port,\n\t\t\t\t\t   gpio_pin_t pin,\n\t\t\t\t\t   gpio_flags_t flags"
         ],
@@ -1369,30 +1553,6 @@
     ],
     [
         [
-            "int adc_channel_setup",
-            "const struct device *dev,\n\t\t\t\tconst struct adc_channel_cfg *channel_cfg"
-        ],
-        "adc.h",
-        false
-    ],
-    [
-        [
-            "int adc_read",
-            "const struct device *dev,\n\t\t       const struct adc_sequence *sequence"
-        ],
-        "adc.h",
-        false
-    ],
-    [
-        [
-            "int adc_read_async",
-            "const struct device *dev,\n\t\t\t     const struct adc_sequence *sequence,\n\t\t\t     struct k_poll_signal *async"
-        ],
-        "adc.h",
-        false
-    ],
-    [
-        [
             "int auxdisplay_display_on",
             "const struct device *dev"
         ],
@@ -1901,166 +2061,6 @@
             "const struct device *dev"
         ],
         "comparator.h",
-        false
-    ],
-    [
-        [
-            "bool counter_is_counting_up",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint8_t counter_get_num_of_channels",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint32_t counter_get_frequency",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint32_t counter_us_to_ticks",
-            "const struct device *dev, uint64_t us"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint64_t counter_ticks_to_us",
-            "const struct device *dev, uint32_t ticks"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint32_t counter_get_max_top_value",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_start",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_stop",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_get_value",
-            "const struct device *dev, uint32_t *ticks"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_get_value_64",
-            "const struct device *dev, uint64_t *ticks"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_reset",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_set_channel_alarm",
-            "const struct device *dev,\n\t\t\t\t\tuint8_t chan_id,\n\t\t\t\t\tconst struct counter_alarm_cfg *alarm_cfg"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_cancel_channel_alarm",
-            "const struct device *dev,\n\t\t\t\t\t   uint8_t chan_id"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_set_top_value",
-            "const struct device *dev,\n\t\t\t\t    const struct counter_top_cfg *cfg"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_get_pending_int",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint32_t counter_get_top_value",
-            "const struct device *dev"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int counter_set_guard_period",
-            "const struct device *dev,\n\t\t\t\t\tuint32_t ticks,\n\t\t\t\t\tuint32_t flags"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "uint32_t counter_get_guard_period",
-            "const struct device *dev,\n\t\t\t\t\t    uint32_t flags"
-        ],
-        "counter.h",
-        false
-    ],
-    [
-        [
-            "int dac_channel_setup",
-            "const struct device *dev,\n\t\t\t\tconst struct dac_channel_cfg *channel_cfg"
-        ],
-        "dac.h",
-        false
-    ],
-    [
-        [
-            "int dac_write_value",
-            "const struct device *dev, uint8_t channel,\n\t\t\t      uint32_t value"
-        ],
-        "dac.h",
         false
     ],
     [

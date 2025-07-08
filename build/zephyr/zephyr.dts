@@ -19,12 +19,14 @@
 		zephyr,touch = &stmpe811;           /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:25 */
 		zephyr,console = &cdc_acm_uart0;    /* in ProfetoFinal\stm32f429i_disc1.overlay:11 */
 		zephyr,shell-uart = &cdc_acm_uart0; /* in ProfetoFinal\stm32f429i_disc1.overlay:12 */
+		zephyr,cpu-load-counter = &timers2; /* in ProfetoFinal\stm32f429i_disc1.overlay:13 */
 	};
 
 	/* node '/aliases' defined in zephyr\dts\common\skeleton.dtsi:13 */
 	aliases {
-		led0 = &green_led;  /* in ProfetoFinal\stm32f429i_disc1.overlay:16 */
-		sw0 = &user_button; /* in ProfetoFinal\stm32f429i_disc1.overlay:17 */
+		led0 = &green_led;  /* in ProfetoFinal\stm32f429i_disc1.overlay:17 */
+		led1 = &red_led_4;  /* in ProfetoFinal\stm32f429i_disc1.overlay:18 */
+		sw0 = &user_button; /* in ProfetoFinal\stm32f429i_disc1.overlay:19 */
 	};
 
 	/* node '/soc' defined in zephyr\dts\arm\armv7-m.dtsi:6 */
@@ -139,7 +141,7 @@
 				#gpio-cells = < 0x2 >;        /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:162 */
 				reg = < 0x40020000 0x400 >;   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:163 */
 				clocks = < &rcc 0x30 0x1 >;   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:164 */
-				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:35 */
+				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:75 */
 				phandle = < 0xd >;            /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:170 */
 			};
 
@@ -197,7 +199,7 @@
 				#gpio-cells = < 0x2 >;        /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:32 */
 				reg = < 0x40021800 0x400 >;   /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:33 */
 				clocks = < &rcc 0x30 0x40 >;  /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:34 */
-				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:31 */
+				status = "okay";              /* in ProfetoFinal\stm32f429i_disc1.overlay:71 */
 				phandle = < 0x5f >;           /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:39 */
 			};
 
@@ -992,7 +994,7 @@
 			interrupts = < 0x1c 0x0 >;      /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:353 */
 			interrupt-names = "global";     /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:354 */
 			st,prescaler = < 0x0 >;         /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:355 */
-			status = "disabled";            /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:356 */
+			status = "okay";                /* in ProfetoFinal\stm32f429i_disc1.overlay:66 */
 
 			/* node '/soc/timers@40000000/pwm' defined in zephyr\dts\arm\st\f4\stm32f4.dtsi:358 */
 			pwm {
@@ -1213,14 +1215,35 @@
 			reg = < 0x40012000 0x400 >;                                  /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:545 */
 			clocks = < &rcc 0x44 0x100 >;                                /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:546 */
 			interrupts = < 0x12 0x0 >;                                   /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:547 */
-			status = "disabled";                                         /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:548 */
 			#io-channel-cells = < 0x1 >;                                 /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:549 */
 			resolutions = < 0x607804 0x517804 0x427804 0x337804 >;       /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:550 */
 			sampling-times = < 0x3 0xf 0x1c 0x38 0x54 0x70 0x90 0x1e0 >; /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:554 */
 			st,adc-clock-source = "SYNC";                                /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:555 */
 			st,adc-sequencer = "FULLY_CONFIGURABLE";                     /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:556 */
 			st,adc-oversampler = "OVERSAMPLER_NONE";                     /* in zephyr\dts\arm\st\f4\stm32f4.dtsi:557 */
+			st,adc-prescaler = < 0x4 >;                                  /* in ProfetoFinal\stm32f429i_disc1.overlay:39 */
+			status = "okay";                                             /* in ProfetoFinal\stm32f429i_disc1.overlay:40 */
+			#address-cells = < 0x1 >;                                    /* in ProfetoFinal\stm32f429i_disc1.overlay:41 */
+			#size-cells = < 0x0 >;                                       /* in ProfetoFinal\stm32f429i_disc1.overlay:42 */
 			phandle = < 0x5b >;                                          /* in zephyr\dts\arm\st\f4\stm32f427.dtsi:105 */
+
+			/* node '/soc/adc@40012000/channel@1' defined in ProfetoFinal\stm32f429i_disc1.overlay:44 */
+			channel@1 {
+				reg = < 0x1 >;                         /* in ProfetoFinal\stm32f429i_disc1.overlay:45 */
+				zephyr,gain = "ADC_GAIN_1";            /* in ProfetoFinal\stm32f429i_disc1.overlay:46 */
+				zephyr,reference = "ADC_REF_INTERNAL"; /* in ProfetoFinal\stm32f429i_disc1.overlay:47 */
+				zephyr,acquisition-time = < 0x0 >;     /* in ProfetoFinal\stm32f429i_disc1.overlay:48 */
+				zephyr,resolution = < 0xc >;           /* in ProfetoFinal\stm32f429i_disc1.overlay:49 */
+			};
+
+			/* node '/soc/adc@40012000/channel@6' defined in ProfetoFinal\stm32f429i_disc1.overlay:52 */
+			channel@6 {
+				reg = < 0x6 >;                         /* in ProfetoFinal\stm32f429i_disc1.overlay:53 */
+				zephyr,gain = "ADC_GAIN_1";            /* in ProfetoFinal\stm32f429i_disc1.overlay:54 */
+				zephyr,reference = "ADC_REF_INTERNAL"; /* in ProfetoFinal\stm32f429i_disc1.overlay:55 */
+				zephyr,acquisition-time = < 0x0 >;     /* in ProfetoFinal\stm32f429i_disc1.overlay:56 */
+				zephyr,resolution = < 0xc >;           /* in ProfetoFinal\stm32f429i_disc1.overlay:57 */
+			};
 		};
 
 		/* node '/soc/dma@40026000' defined in zephyr\dts\arm\st\f4\stm32f4.dtsi:560 */
@@ -1509,12 +1532,12 @@
 			         < &rcc 0x7 0xff >;                                                  /* in zephyr\dts\arm\st\f4\stm32f405.dtsi:203 */
 			pinctrl-0 = < &usb_otg_hs_dm_pb14 &usb_otg_hs_dp_pb15 &usb_otg_hs_id_pb12 >; /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:269 */
 			pinctrl-names = "default";                                                   /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:270 */
-			status = "okay";                                                             /* in ProfetoFinal\stm32f429i_disc1.overlay:40 */
+			status = "okay";                                                             /* in ProfetoFinal\stm32f429i_disc1.overlay:80 */
 
-			/* node '/soc/usb@40040000/cdc_acm_uart0' defined in ProfetoFinal\stm32f429i_disc1.overlay:41 */
+			/* node '/soc/usb@40040000/cdc_acm_uart0' defined in ProfetoFinal\stm32f429i_disc1.overlay:81 */
 			cdc_acm_uart0: cdc_acm_uart0 {
-				compatible = "zephyr,cdc-acm-uart"; /* in ProfetoFinal\stm32f429i_disc1.overlay:42 */
-				label = "CDC_ACM_UART_0";           /* in ProfetoFinal\stm32f429i_disc1.overlay:43 */
+				compatible = "zephyr,cdc-acm-uart"; /* in ProfetoFinal\stm32f429i_disc1.overlay:82 */
+				label = "CDC_ACM_UART_0";           /* in ProfetoFinal\stm32f429i_disc1.overlay:83 */
 			};
 		};
 
@@ -1605,8 +1628,9 @@
 			compatible = "st,stm32-dac";       /* in zephyr\dts\arm\st\f4\stm32f429.dtsi:15 */
 			reg = < 0x40007400 0x400 >;        /* in zephyr\dts\arm\st\f4\stm32f429.dtsi:16 */
 			clocks = < &rcc 0x40 0x20000000 >; /* in zephyr\dts\arm\st\f4\stm32f429.dtsi:17 */
-			status = "disabled";               /* in zephyr\dts\arm\st\f4\stm32f429.dtsi:18 */
 			#io-channel-cells = < 0x1 >;       /* in zephyr\dts\arm\st\f4\stm32f429.dtsi:19 */
+			status = "okay";                   /* in ProfetoFinal\stm32f429i_disc1.overlay:62 */
+			phandle = < 0x63 >;                /* in ProfetoFinal\stm32f429i_disc1.overlay:31 */
 		};
 
 		/* node '/soc/ethernet@40028000' defined in zephyr\dts\arm\st\f4\stm32f407.dtsi:13 */
@@ -1973,7 +1997,7 @@
 
 	/* node '/leds' defined in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:35 */
 	leds {
-		compatible = "gpio-leds"; /* in ProfetoFinal\stm32f429i_disc1.overlay:21 */
+		compatible = "gpio-leds"; /* in ProfetoFinal\stm32f429i_disc1.overlay:23 */
 
 		/* node '/leds/led_3' defined in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:38 */
 		green_led_3: led_3 {
@@ -1987,10 +2011,10 @@
 			label = "User LD4";         /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:45 */
 		};
 
-		/* node '/leds/led_0' defined in ProfetoFinal\stm32f429i_disc1.overlay:22 */
+		/* node '/leds/led_0' defined in ProfetoFinal\stm32f429i_disc1.overlay:24 */
 		green_led: led_0 {
-			gpios = < &gpiog 0xd 0x0 >; /* in ProfetoFinal\stm32f429i_disc1.overlay:23 */
-			label = "Green LED";        /* in ProfetoFinal\stm32f429i_disc1.overlay:24 */
+			gpios = < &gpiog 0xd 0x0 >; /* in ProfetoFinal\stm32f429i_disc1.overlay:25 */
+			label = "Green LED";        /* in ProfetoFinal\stm32f429i_disc1.overlay:26 */
 		};
 	};
 
@@ -2050,5 +2074,14 @@
 			ngamctrl = [ 00 16 1B 04 11 07 31 33 42 05 0C 0A 28 2F 0F ]; /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:102 */
 			phandle = < 0x58 >;                                          /* in zephyr\boards\st\stm32f429i_disc1\stm32f429i_disc1.dts:242 */
 		};
+	};
+
+	/* node '/zephyr,user' defined in ProfetoFinal\stm32f429i_disc1.overlay:30 */
+	zephyr,user {
+		dac = < &dac1 >;             /* in ProfetoFinal\stm32f429i_disc1.overlay:31 */
+		dac-channel-id = < 0x1 >;    /* in ProfetoFinal\stm32f429i_disc1.overlay:32 */
+		dac-resolution = < 0xc >;    /* in ProfetoFinal\stm32f429i_disc1.overlay:33 */
+		io-channels = < &adc1 0x1 >,
+		              < &adc1 0x6 >; /* in ProfetoFinal\stm32f429i_disc1.overlay:34 */
 	};
 };

@@ -7,6 +7,29 @@
  */
 
 /* Symbol declarations */
+extern void * const z_impl_adc_channel_setup;
+extern void * const z_impl_adc_read;
+extern void * const z_impl_adc_read_async;
+extern void * const z_impl_counter_cancel_channel_alarm;
+extern void * const z_impl_counter_get_frequency;
+extern void * const z_impl_counter_get_guard_period;
+extern void * const z_impl_counter_get_max_top_value;
+extern void * const z_impl_counter_get_num_of_channels;
+extern void * const z_impl_counter_get_pending_int;
+extern void * const z_impl_counter_get_top_value;
+extern void * const z_impl_counter_get_value;
+extern void * const z_impl_counter_get_value_64;
+extern void * const z_impl_counter_is_counting_up;
+extern void * const z_impl_counter_reset;
+extern void * const z_impl_counter_set_channel_alarm;
+extern void * const z_impl_counter_set_guard_period;
+extern void * const z_impl_counter_set_top_value;
+extern void * const z_impl_counter_start;
+extern void * const z_impl_counter_stop;
+extern void * const z_impl_counter_ticks_to_us;
+extern void * const z_impl_counter_us_to_ticks;
+extern void * const z_impl_dac_channel_setup;
+extern void * const z_impl_dac_write_value;
 extern void * const z_impl_device_deinit;
 extern void * const z_impl_device_get_binding;
 extern void * const z_impl_device_get_by_dt_nodelabel;
@@ -175,6 +198,29 @@ extern void * const z_impl_zephyr_read_stdin;
 extern void * const z_impl_zephyr_write_stdout;
 
 /* Exported symbols */
+EXPORT_SYMBOL(z_impl_adc_channel_setup);
+EXPORT_SYMBOL(z_impl_adc_read);
+EXPORT_SYMBOL(z_impl_adc_read_async);
+EXPORT_SYMBOL(z_impl_counter_cancel_channel_alarm);
+EXPORT_SYMBOL(z_impl_counter_get_frequency);
+EXPORT_SYMBOL(z_impl_counter_get_guard_period);
+EXPORT_SYMBOL(z_impl_counter_get_max_top_value);
+EXPORT_SYMBOL(z_impl_counter_get_num_of_channels);
+EXPORT_SYMBOL(z_impl_counter_get_pending_int);
+EXPORT_SYMBOL(z_impl_counter_get_top_value);
+EXPORT_SYMBOL(z_impl_counter_get_value);
+EXPORT_SYMBOL(z_impl_counter_get_value_64);
+EXPORT_SYMBOL(z_impl_counter_is_counting_up);
+EXPORT_SYMBOL(z_impl_counter_reset);
+EXPORT_SYMBOL(z_impl_counter_set_channel_alarm);
+EXPORT_SYMBOL(z_impl_counter_set_guard_period);
+EXPORT_SYMBOL(z_impl_counter_set_top_value);
+EXPORT_SYMBOL(z_impl_counter_start);
+EXPORT_SYMBOL(z_impl_counter_stop);
+EXPORT_SYMBOL(z_impl_counter_ticks_to_us);
+EXPORT_SYMBOL(z_impl_counter_us_to_ticks);
+EXPORT_SYMBOL(z_impl_dac_channel_setup);
+EXPORT_SYMBOL(z_impl_dac_write_value);
 EXPORT_SYMBOL(z_impl_device_deinit);
 EXPORT_SYMBOL(z_impl_device_get_binding);
 EXPORT_SYMBOL(z_impl_device_get_by_dt_nodelabel);

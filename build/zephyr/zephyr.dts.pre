@@ -4310,10 +4310,12 @@ zephyr_udc0: &usbotg_hs {
 
         zephyr,console = &cdc_acm_uart0;
         zephyr,shell-uart = &cdc_acm_uart0;
+        zephyr,cpu-load-counter = &timers2;
     };
 
     aliases {
         led0 = &green_led;
+        led1 = &red_led_4;
         sw0 = &user_button;
     };
 
@@ -4324,6 +4326,44 @@ zephyr_udc0: &usbotg_hs {
             label = "Green LED";
         };
     };
+
+    zephyr,user {
+  dac = <&dac1>;
+  dac-channel-id = <1>;
+  dac-resolution = <12>;
+  io-channels = <&adc1 1>, <&adc1 6>;
+ };
+};
+
+&adc1 {
+    st,adc-prescaler = <4>;
+    status = "okay";
+    #address-cells = <1>;
+ #size-cells = <0>;
+
+ channel@1 {
+  reg = <1>;
+  zephyr,gain = "ADC_GAIN_1";
+  zephyr,reference = "ADC_REF_INTERNAL";
+  zephyr,acquisition-time = <0>;
+  zephyr,resolution = <12>;
+ };
+
+ channel@6 {
+  reg = <6>;
+  zephyr,gain = "ADC_GAIN_1";
+  zephyr,reference = "ADC_REF_INTERNAL";
+  zephyr,acquisition-time = <0>;
+  zephyr,resolution = <12>;
+ };
+};
+
+&dac1 {
+    status = "okay";
+};
+
+&timers2 {
+    status = "okay";
 };
 
 
