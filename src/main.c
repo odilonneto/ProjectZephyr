@@ -47,6 +47,7 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios,
                                                               {0});
+uint64_t sample_speed = 1000;
 static struct gpio_callback button_cb_data;
 volatile uint32_t led_speed = 1000;
 volatile uint8_t led_mode = 0; // 0 = leds alternando, 1 = apenas led verde, 2 = apenas led vermelho, 3 = leds sincronizados
@@ -110,6 +111,7 @@ void led_task(void *arg1, void *arg2, void *arg3)
         }
 
         k_sleep(K_MSEC(led_speed));
+        
     }
 }
 
@@ -201,25 +203,9 @@ void filter_task()
             {
                 last_adc_mv = val_mv;
             }
-
-            // Print ADC/DAC se habilitado
-            if (adc_dac_enable_print)
-            {
-                if (err >= 0)
-                {
-                    /* Use LOG_INF em vez de printk para não bloquear a thread */
-                    LOG_INF("ADC[%d]: %u (%d mV) -> DAC: %u (filtered)",
-                           i, last_adc_value, val_mv, filtered_value);
-                }
-                else
-                {
-                    LOG_INF("ADC[%d]: %u -> DAC: %u (filtered)",
-                           i, last_adc_value, filtered_value);
-                }
-            }
-
-            k_sleep(K_MSEC(sleep_time));
         }
+
+            k_sleep(K_USEC(sample_speed));
     }
 }
 
@@ -292,7 +278,7 @@ static int cmd_led_control(const struct shell *shell, size_t argc, char **argv)
 
         uint32_t user_input_led_speed = atoi(argv[1]);
         led_speed = user_input_led_speed;
-        shell_print(shell, "Velocidade do LED alterada para: %d ms", led_speed);
+        shell_print(shell, "Frequência de amostragem alterada para: %d hz", led_speed);
         return 0;
     }
     shell_print(shell, "Velocidade do LED inválida.");
@@ -348,6 +334,7 @@ static void specific_task_info_callback(const struct k_thread *thread, void *use
             shell_print(search_info_g.shell, "Último ADC: %d (%d mV)",
                         last_adc_value, last_adc_mv);
             shell_print(search_info_g.shell, "Último DAC: %d", last_dac_value);
+            shell_print(search_info_g.shell, "Frequência de amostragem: %i", 1000000/sample_speed);
         }
         shell_print(search_info_g.shell, "=====================================");
     }
@@ -376,7 +363,6 @@ static int cmd_task_info(const struct shell *shell, size_t argc, char **argv)
         return -EINVAL;
     }
 
-    // A nova abordagem é iterar manualmente sobre as threads
     k_thread_foreach(specific_task_info_callback, NULL);
 
     if (argc == 2 && !search_info_g.found)
@@ -420,7 +406,6 @@ static int cmd_system_info(const struct shell *shell, size_t argc, char **argv)
 
     shell_print(shell, "");
 
-    // Informações de heap simplificadas - remover se não funcionar
     shell_print(shell, "Heap configurado: %d bytes", CONFIG_HEAP_MEM_POOL_SIZE);
 
     shell_print(shell, "");
@@ -433,29 +418,36 @@ static int cmd_system_info(const struct shell *shell, size_t argc, char **argv)
 /* Comando para controlar saída ADC/DAC */
 static int cmd_adc_dac_control(const struct shell *shell, size_t argc, char **argv)
 {
-    if (argc != 2)
+     if (argc != 2)
     {
-        shell_print(shell, "Uso: adc_dac <on|off>");
+        shell_print(shell, "Uso: adc_dac <frequencia_de_amostragem_hz>");
         return -EINVAL;
     }
 
-    if (strcmp(argv[1], "on") == 0)
+    if (is_string_number(argv[1]) != 0)
     {
-        adc_dac_enable_print = 1;
-        shell_print(shell, "Saída ADC/DAC habilitada");
-    }
-    else if (strcmp(argv[1], "off") == 0)
-    {
-        adc_dac_enable_print = 0;
-        shell_print(shell, "Saída ADC/DAC desabilitada");
-    }
-    else
-    {
-        shell_print(shell, "Parâmetro inválido. Use 'on' ou 'off'");
-        return -EINVAL;
-    }
 
-    return 0;
+        if (strlen(argv[1]) > 10 || strlen(argv[1]) == 0)
+        {
+            shell_print(shell, "Frequencia inválida.");
+            return -EINVAL;
+        }
+
+        if (argv[1][0] == '-')
+        {
+            shell_print(shell, "Frequência inválida.");
+            return -EINVAL;
+        }
+        if (atoi(argv[1]) < 1 || atoi(argv[1]) > 100000){
+            shell_print(shell, "Frequência de amostragem inválida. Digite um valor entre 1 e 100khz");
+        }
+        uint32_t user_input_sample_frequency = atoi(argv[1]);
+        sample_speed = ( 1 / user_input_sample_frequency ) * 1000000; // Período em microssegundos
+        shell_print(shell, "Frequencia de amostragem alterada para: %d Hz ", user_input_sample_frequency);
+        return 0;
+    }
+    shell_print(shell, "Frequência inválida.");
+    return -EINVAL;
 }
 
 /* Comando para mostrar informações do sistema */
@@ -467,7 +459,7 @@ static int cmd_help(const struct shell *shell, size_t argc, char **argv)
     shell_print(shell, "task_info [nome]    - Informações detalhadas de tarefa");
     shell_print(shell, "                      Tarefas: led_task, filter_task");
     shell_print(shell, "system              - Informações do sistema completo");
-    shell_print(shell, "adc_dac <on|off>    - Habilita/desabilita saída ADC/DAC");
+    shell_print(shell, "adc_dac <frequencia_amostragem>    - Habilita/desabilita saída ADC/DAC");
     shell_print(shell, "help                - Mostra esta ajuda");
     shell_print(shell, "");
     shell_print(shell, "=== Informações das Tarefas de Tempo Real ===");
