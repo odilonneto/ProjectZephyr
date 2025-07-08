@@ -5,6 +5,8 @@
 #include <zephyr/shell/shell.h> // api do shel, comunicação
 #include <stdlib.h>             // para atoi
 #include <string.h>             // para strlen, strtol
+#include <zephyr/debug/thread_analyzer.h>
+
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -17,6 +19,8 @@ static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios,
 							      {0});
 static struct gpio_callback button_cb_data;
+static uint64_t last_total_cycles = 0;
+static uint64_t last_idle_cycles = 0;
 volatile uint32_t led_speed = 1000;
 volatile uint8_t led_mode = 0; // 0 = leds alternando, 1 = apenas led verde, 2 = apenas led vermelho, 3 = leds sincronizados
 #define LED_STACK_SIZE 512
@@ -59,7 +63,7 @@ void led_task(void *arg1, void *arg2, void *arg3)
 int is_string_number(const char *str) {
     char *endptr;
     long val = strtol(str, &endptr, 10);
-    
+    (void*) val;
     return (*endptr == '\0' && endptr != str);
 }
 
@@ -68,9 +72,11 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
 	    if (led_mode == 0){
+            gpio_pin_set_dt(&led, 1);
             gpio_pin_set_dt(&led1, 0);
         } else if (led_mode == 1){
             gpio_pin_set_dt(&led, 0);
+            gpio_pin_set_dt(&led1, 1);
         } else if (led_mode == 2){
             gpio_pin_set_dt(&led, 1);
             gpio_pin_set_dt(&led1, 1);
@@ -130,11 +136,29 @@ static int cmd_task_info(const struct shell *shell, size_t argc, char **argv)
     return 0;
 }
 
+static void thread_info_callback(struct thread_analyzer_info *info)
+{
+    printk("Task: %s\n", info->name);
+    printk(" Stack: %u/%u bytes (%.1f%% used)\n", 
+           info->stack_used, info->stack_size, 
+           (float)info->stack_used / info->stack_size * 100);
+    printk("CPU usage: %u%%\n", info->utilization);
+    printk("----------------\n");
+}
+
+static int cmd_task_kernel(const struct shell *shell, size_t argc, char **argv)
+{
+    shell_print(shell, "--- Informacoes das Tarefas instaladas ---");
+    thread_analyzer_run(thread_info_callback, 0);
+    // k_thread_foreach(thread_info_cb, (void *)shell);
+    shell_print(shell, "--- Para informações específicas da tarefa, digite task_info <nome_tarefa> ---");
+    return 0;
+}
 
 /* Registro dos comandos no sistema do Shell */
 SHELL_CMD_REGISTER(led, NULL, "Controla a tarefa do LED (start/stop)", cmd_led_control);
-SHELL_CMD_REGISTER(task_info, NULL, "Mostra informacoes da tarefa do LED", cmd_task_info);
-
+SHELL_CMD_REGISTER(task_info, NULL, "Mostra informacoes da task informada.", cmd_task_info);
+SHELL_CMD_REGISTER(system, NULL, "Mostra informações sobre todas as tarefas instaladas, heap livre e runtime das tarefas    ", cmd_task_kernel);
 
 /* --- FUNÇÃO PRINCIPAL --- */
 int main(void)
@@ -226,10 +250,10 @@ Exemplos de tarefa de tempo real soft realtime:
 2. Criar uma tarefa para o console/shell que permita o acesso às informações primárias
  do sistema (tarefas instaladas, heap livre e informações de runtime das tarefas).
 Crie também um comando para acessar informações com relação às tarefas de tempo real.
+Falta implementar: informações em relação às tarefas de tempo real.
 
-
-Pegar essas informações (como?). Fazer uma melhoria no comando task_info e passar um parametro que será a tarefa que se deseja ver as
-informações, atualmente só mostra do LED.
+Fazer uma melhoria no comando task_info e passar um parametro que será a tarefa que se deseja ver asinformações, atualmente só mostra do LED.
+Fazer um comando help que mostra os comandos disponíveis. Fazer um print no shell quando inicia o sistema chamando essa função help.
 
 3. Criar uma tarefa para piscar um led. done
 

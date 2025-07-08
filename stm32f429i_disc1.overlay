@@ -10,6 +10,7 @@
         /* Redireciona o console e o shell para o dispositivo USB CDC ACM UART */
         zephyr,console = &cdc_acm_uart0;
         zephyr,shell-uart = &cdc_acm_uart0;
+        zephyr,cpu-load-counter = &timers2;
     };
     
     aliases {
@@ -25,6 +26,10 @@
             label = "Green LED";
         };
     };
+};
+
+&timers2 {
+    status = "okay";
 };
 
 /* Habilita os clocks dos GPIOs necessários */
